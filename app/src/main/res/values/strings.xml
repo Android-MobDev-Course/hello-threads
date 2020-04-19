@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">HelloThreads</string>
+    <string name="schedule_new_task">Schedule New Task</string>
+    <string name="my_task_manager">My Task Manager</string>
+    <string name="completed">Completed:</string>
+    <string name="zero_value">0</string>
+    <string name="errors">Errors:</string>
+    <string name="scheduled">Scheduled:</string>
+    <string name="new_task">Add New Tasks</string>
+    <string name="started">Started</string>
+    <string name="default_task_value">1</string>
+</resources>
