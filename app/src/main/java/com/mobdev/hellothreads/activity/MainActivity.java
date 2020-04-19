@@ -1,11 +1,15 @@
 package com.mobdev.hellothreads.activity;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,7 +18,7 @@ import android.widget.Toast;
 
 import com.mobdev.hellothreads.R;
 import com.mobdev.hellothreads.model.TaskStatusDescriptor;
-import com.mobdev.hellothreads.task.MyTaskManager;
+import com.mobdev.hellothreads.task.generic.GenericTaskManager;
 
 import java.util.Locale;
 
@@ -59,17 +63,24 @@ public class MainActivity extends AppCompatActivity {
 
                 if(newTaskCount > 0){
                     Log.d(TAG, "Scheduling new Tasks: " + newTaskCount);
-                    MyTaskManager.getInstance().retrieveLastLog(newTaskCount);
+                    GenericTaskManager.getInstance().retrieveLastLog(newTaskCount);
                 }
                 else
                     Toast.makeText(mContext, "New Task Number Error !", Toast.LENGTH_SHORT).show();
             }
         });
 
+        ActionBar actionBar = getSupportActionBar();
+
+        if(actionBar != null){
+            actionBar.setHomeButtonEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }
+
     }
 
     private void observeTasksStatus(){
-        MyTaskManager.getInstance().getTaskStatus().observe(this, new Observer<TaskStatusDescriptor>() {
+        GenericTaskManager.getInstance().getTaskStatus().observe(this, new Observer<TaskStatusDescriptor>() {
             @Override
             public void onChanged(TaskStatusDescriptor taskStatusDescriptor) {
                 Log.d(TAG, "Task Status Update Received !");
@@ -95,5 +106,31 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "Error parsing New Task Number ! Error: " + e.getLocalizedMessage());
             return 0;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if (id == R.id.action_image) {
+            openImageActivity();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void openImageActivity(){
+        Intent newIntent = new Intent(new Intent(this,ImageLoaderActivity.class));
+        startActivity(newIntent);
     }
 }

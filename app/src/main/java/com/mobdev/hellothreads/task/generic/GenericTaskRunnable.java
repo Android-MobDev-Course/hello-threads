@@ -1,6 +1,5 @@
-package com.mobdev.hellothreads.task;
+package com.mobdev.hellothreads.task.generic;
 
-import com.mobdev.hellothreads.model.LogDescriptor;
 import com.mobdev.hellothreads.utils.LogFactory;
 
 import java.util.Random;
@@ -9,7 +8,7 @@ import java.util.Random;
  * Created by Marco Picone picone.m@gmail.com on 19,April,2020
  * Mobile System Development - University Course
  */
-public class MyTaskRunnable implements Runnable {
+public class GenericTaskRunnable implements Runnable {
 
     private static final String TAG = "MyTaskRunnable";
 
@@ -17,12 +16,12 @@ public class MyTaskRunnable implements Runnable {
 
     private Random random = null;
 
-    private MyTask myTask = null;
+    private GenericTask genericTask = null;
 
-    private LogDescriptor logDescriptor = null;
+    private boolean isSuccess = false;
 
-    public MyTaskRunnable(MyTask myTask) {
-        this.myTask = myTask;
+    public GenericTaskRunnable(GenericTask genericTask) {
+        this.genericTask = genericTask;
     }
 
     @Override
@@ -32,9 +31,9 @@ public class MyTaskRunnable implements Runnable {
          * Stores the current Thread in the the PhotoTask instance, so that the instance
          * can interrupt the Thread.
          */
-        this.myTask.setThread(Thread.currentThread());
+        this.genericTask.setThread(Thread.currentThread());
 
-        myTask.handleState(MyTaskManager.TASK_STARTED);
+        genericTask.handleState(GenericTaskManager.TASK_STARTED);
 
         this.random = new Random();
 
@@ -45,12 +44,11 @@ public class MyTaskRunnable implements Runnable {
             e.printStackTrace();
         } finally {
             // If the decode failed, there's no bitmap.
-            if (null == logDescriptor) {
+            if (!isSuccess) {
                 // Sends a failure status to the PhotoTask
-                myTask.handleState(MyTaskManager.TASK_FAILED);
+                genericTask.handleState(GenericTaskManager.TASK_FAILED);
             } else {
-                //TODO Do something with the data !
-                myTask.handleState(MyTaskManager.TASK_COMPLETE);
+                genericTask.handleState(GenericTaskManager.TASK_COMPLETE);
             }
 
             // Clears the Thread's interrupt flag
@@ -64,9 +62,9 @@ public class MyTaskRunnable implements Runnable {
             Thread.sleep(random.nextInt(RANDOM_TASK_DURATION_MS));
 
             if(isError())
-                this.logDescriptor = null;
+                this.isSuccess = false;
             else
-                this.logDescriptor = LogFactory.createRandomLogDescriptor();
+                this.isSuccess = true;
 
         }catch (Exception e){
             e.printStackTrace();

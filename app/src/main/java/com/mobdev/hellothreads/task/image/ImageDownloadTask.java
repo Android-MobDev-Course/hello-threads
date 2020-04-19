@@ -1,10 +1,12 @@
-package com.mobdev.hellothreads.task;
+package com.mobdev.hellothreads.task.image;
+
+import android.widget.ImageView;
 
 /**
  * Created by Marco Picone picone.m@gmail.com on 19,April,2020
  * Mobile System Development - University Course
  */
-public class MyTask {
+public class ImageDownloadTask {
 
     private String name = null;
 
@@ -16,7 +18,7 @@ public class MyTask {
     /*
      * An object that contains the ThreadPool singleton.
      */
-    private static MyTaskManager taskManager;
+    private ImageDownloadTaskManager taskManager;
 
     /*
      * Fields containing references to the two runnable objects that handle downloading and
@@ -24,12 +26,15 @@ public class MyTask {
      */
     private Runnable mTaskRunnable;
 
-    private int state;
+    private ImageView imageView;
 
-    public MyTask(String name) {
+    private int imageDrawableId;
+
+    public ImageDownloadTask(String name, ImageView imageView) {
         this.name = name;
-        this.taskManager = MyTaskManager.getInstance();
-        this.mTaskRunnable = new MyTaskRunnable(this);
+        this.taskManager = ImageDownloadTaskManager.getInstance();
+        this.mTaskRunnable = new ImageDownloadTaskRunnable(this);
+        this.imageView = imageView;
     }
 
     public void setThread(Thread thread) {
@@ -51,5 +56,21 @@ public class MyTask {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public ImageView getImageView() {
+        return imageView;
+    }
+
+    public void setImageView(ImageView imageView) {
+        this.imageView = imageView;
+    }
+
+    public int getImageDrawableId() {
+        return imageDrawableId;
+    }
+
+    public void setImageDrawableId(int imageDrawableId) {
+        this.imageDrawableId = imageDrawableId;
     }
 }
