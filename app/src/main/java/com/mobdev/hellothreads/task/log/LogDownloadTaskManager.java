@@ -4,8 +4,11 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.mobdev.hellothreads.model.LogDescriptor;
 import com.mobdev.hellothreads.model.TaskStatusDescriptor;
+import com.mobdev.hellothreads.persistence.LogDescriptorManager;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -16,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  * Created by Marco Picone picone.m@gmail.com on 19,April,2020
  * Mobile System Development - University Course
  */
-public class LogGenerationTaskManager {
+public class LogDownloadTaskManager {
 
     private static final String TAG = "MyTaskManager";
 
@@ -45,17 +48,15 @@ public class LogGenerationTaskManager {
     // A managed pool of background download threads
     private final ThreadPoolExecutor mDownloadThreadPool;
 
-    private static final LogGenerationTaskManager instance = new LogGenerationTaskManager();
+    private static final LogDownloadTaskManager instance = new LogDownloadTaskManager();
 
-    private MutableLiveData<TaskStatusDescriptor> taskStatus;
-
-    private TaskStatusDescriptor taskStatusDescriptor;
-
-    public static LogGenerationTaskManager getInstance() {
+    public static LogDownloadTaskManager getInstance() {
         return instance;
     }
 
-    private LogGenerationTaskManager() {
+    private LogDescriptorManager logDescriptorManager;
+
+    private LogDownloadTaskManager() {
 
         /*
          * Creates a work queue for the pool of Thread objects used for downloading, using a linked
@@ -71,52 +72,43 @@ public class LogGenerationTaskManager {
                 KEEP_ALIVE_TIME,
                 KEEP_ALIVE_TIME_UNIT,
                 mDownloadWorkQueue);
-
-        taskStatus = new MutableLiveData<>();
-
     }
 
-    public void handleState(LogGenerationTask logGenerationTask, int state) {
+    public LogDescriptorManager getLogDescriptorManager() {
+        return logDescriptorManager;
+    }
+
+    public void setLogDescriptorManager(LogDescriptorManager logDescriptorManager) {
+        this.logDescriptorManager = logDescriptorManager;
+    }
+
+    public void handleState(LogDownloadTask logDownloadTask, int state) {
 
         switch (state) {
             // The task finished downloading and decoding the image
             case TASK_STARTED:
-                Log.d(TAG, logGenerationTask.getName() + " Started ...");
-                taskStatusDescriptor.incrementStarted();
-                notifyStatusUpdate();
+                Log.d(TAG, logDownloadTask.getName() + " Started ...");
                 break;
             case TASK_COMPLETE:
-                Log.d(TAG, logGenerationTask.getName() + " Completed Correctly !");
-                taskStatusDescriptor.incrementCompleted();
-                notifyStatusUpdate();
+                Log.d(TAG, logDownloadTask.getName() + " Completed Correctly !");
+                saveNewLogList(logDownloadTask.getLogDescriptorList());
                 break;
             default:
-                Log.e(TAG, logGenerationTask.getName() + " Task Error !");
-                taskStatusDescriptor.incrementErrors();
-                notifyStatusUpdate();
+                Log.e(TAG, logDownloadTask.getName() + " Task Error !");
                 break;
         }
     }
 
-    private void notifyStatusUpdate(){
-        //We are in a background thread and we can not use the setValue method
-        //Using setValue you will receive an Exception: "java.lang.IllegalStateException: Cannot invoke setValue on a background thread"
-        taskStatus.postValue(this.taskStatusDescriptor);
+    private void saveNewLogList(List<LogDescriptor> logDescriptorList) {
+        if(logDescriptorManager != null)
+            logDescriptorManager.addLogList(logDescriptorList);
+        else
+            Log.e(TAG, "Log Description Manager = Null ! ");
+
     }
 
-    public void retrieveLastLog(int count) {
-
-        if(taskStatusDescriptor == null)
-            taskStatusDescriptor = new TaskStatusDescriptor();
-
-        for(int i=0; i<count; i++){
-            taskStatusDescriptor.incrementScheduled();
-            LogGenerationTask logGenerationTask = new LogGenerationTask(String.format(Locale.ITALY, "MyTask-%d",taskStatusDescriptor.getScheduledCount()));
-            instance.mDownloadThreadPool.execute(logGenerationTask.getTaskRunnable());
-        }
-    }
-
-    public MutableLiveData<TaskStatusDescriptor> getTaskStatus() {
-        return taskStatus;
-    }
+    public void downloadUpdatedLogList() {
+        LogDownloadTask logDownloadTask = new LogDownloadTask(String.format(Locale.ITALY, "LogDownloadTask-%d",System.currentTimeMillis()));
+        instance.mDownloadThreadPool.execute(logDownloadTask.getTaskRunnable());
+     }
 }

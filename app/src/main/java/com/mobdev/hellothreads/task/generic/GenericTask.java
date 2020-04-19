@@ -24,8 +24,6 @@ public class GenericTask {
      */
     private Runnable mTaskRunnable;
 
-    private int state;
-
     public GenericTask(String name) {
         this.name = name;
         this.taskManager = GenericTaskManager.getInstance();

@@ -1,26 +1,36 @@
 package com.mobdev.hellothreads.model;
 
-/**
- * Created by Marco Picone (picone.m@gmail.com) 20/03/2020
- * Generic Data Structure
- */
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+
+@Entity(tableName = "logs")
 public class LogDescriptor {
 
+	@PrimaryKey(autoGenerate = true)
 	private int id;
 
+	@ColumnInfo(name = "timestamp")
 	private long timestamp = 0;
 
+	@ColumnInfo(name = "latitude")
 	private double latitude = 0.0;
 
+	@ColumnInfo(name = "longitude")
 	private double longitude = 0.0;
 
+	@ColumnInfo(name = "type")
 	private String type = null;
 
+	@ColumnInfo(name = "data")
 	private String data = null;
-	
+
 	public LogDescriptor() {
 	}
 
+	@Ignore
 	public LogDescriptor(double latitude, double longitude, String type, String data) {
 		super();
 		this.timestamp = System.currentTimeMillis();
@@ -30,8 +40,9 @@ public class LogDescriptor {
 		this.data = data;
 	}
 
- 	public LogDescriptor(long timestamp, double latitude, double longitude,
-                         String type, String data) {
+	@Ignore
+	public LogDescriptor(long timestamp, double latitude, double longitude,
+						 String type, String data) {
 		super();
 		this.timestamp = timestamp;
 		this.latitude = latitude;
@@ -79,8 +90,8 @@ public class LogDescriptor {
 	public void setData(String data) {
 		this.data = data;
 	}
-	
-	
+
+
 	public int getId() {
 		return id;
 	}

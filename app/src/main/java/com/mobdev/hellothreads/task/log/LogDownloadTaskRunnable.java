@@ -3,26 +3,30 @@ package com.mobdev.hellothreads.task.log;
 import com.mobdev.hellothreads.model.LogDescriptor;
 import com.mobdev.hellothreads.utils.LogFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
  * Created by Marco Picone picone.m@gmail.com on 19,April,2020
  * Mobile System Development - University Course
  */
-public class LogGenerationTaskRunnable implements Runnable {
+public class LogDownloadTaskRunnable implements Runnable {
 
     private static final String TAG = "MyTaskRunnable";
 
     private static final int RANDOM_TASK_DURATION_MS = 5000;
 
+    private static final int LOG_LIST_SIZE = 20;
+
     private Random random = null;
 
-    private LogGenerationTask logGenerationTask = null;
+    private LogDownloadTask logDownloadTask = null;
 
-    private LogDescriptor logDescriptor = null;
+    private List<LogDescriptor> logDescriptorList = null;
 
-    public LogGenerationTaskRunnable(LogGenerationTask logGenerationTask) {
-        this.logGenerationTask = logGenerationTask;
+    public LogDownloadTaskRunnable(LogDownloadTask logDownloadTask) {
+        this.logDownloadTask = logDownloadTask;
     }
 
     @Override
@@ -32,9 +36,9 @@ public class LogGenerationTaskRunnable implements Runnable {
          * Stores the current Thread in the the PhotoTask instance, so that the instance
          * can interrupt the Thread.
          */
-        this.logGenerationTask.setThread(Thread.currentThread());
+        this.logDownloadTask.setThread(Thread.currentThread());
 
-        logGenerationTask.handleState(LogGenerationTaskManager.TASK_STARTED);
+        logDownloadTask.handleState(LogDownloadTaskManager.TASK_STARTED);
 
         this.random = new Random();
 
@@ -45,12 +49,11 @@ public class LogGenerationTaskRunnable implements Runnable {
             e.printStackTrace();
         } finally {
             // If the decode failed, there's no bitmap.
-            if (null == logDescriptor) {
-                // Sends a failure status to the PhotoTask
-                logGenerationTask.handleState(LogGenerationTaskManager.TASK_FAILED);
+            if (null == logDescriptorList) {
+                logDownloadTask.handleState(LogDownloadTaskManager.TASK_FAILED);
             } else {
-                //TODO Do something with the data !
-                logGenerationTask.handleState(LogGenerationTaskManager.TASK_COMPLETE);
+                logDownloadTask.setLogDescriptorList(logDescriptorList);
+                logDownloadTask.handleState(LogDownloadTaskManager.TASK_COMPLETE);
             }
 
             // Clears the Thread's interrupt flag
@@ -60,20 +63,19 @@ public class LogGenerationTaskRunnable implements Runnable {
     }
 
     private void retrieveLogDescriptor(){
+
         try{
             Thread.sleep(random.nextInt(RANDOM_TASK_DURATION_MS));
 
-            if(isError())
-                this.logDescriptor = null;
-            else
-                this.logDescriptor = LogFactory.createRandomLogDescriptor();
+            logDescriptorList = new ArrayList<>();
+
+            for(int i=0 ; i<LOG_LIST_SIZE; i++){
+                logDescriptorList.add(LogFactory.createRandomLogDescriptor());
+            }
 
         }catch (Exception e){
             e.printStackTrace();
         }
     }
 
-    private boolean isError(){
-        return random.nextInt(25)==0;
-    }
 }

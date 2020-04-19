@@ -5,17 +5,10 @@
     tools:context="com.mobdev.hellomaterial.MainActivity" >
 
     <item
-        android:id="@+id/action_image"
+        android:id="@+id/action_list_load"
         android:orderInCategory="100"
-        android:icon="@drawable/ic_action_image"
-        android:title="@string/image_example"
-        app:showAsAction="always"/>
-
-    <item
-        android:id="@+id/action_list"
-        android:orderInCategory="100"
-        android:icon="@drawable/ic_action_list_alt"
-        android:title="@string/image_example"
+        android:icon="@drawable/ic_action_cloud_download"
+        android:title="@string/load_logs_example"
         app:showAsAction="always"/>
 
 </menu>

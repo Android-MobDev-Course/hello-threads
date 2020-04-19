@@ -11,4 +11,10 @@
     <string name="default_task_value">1</string>
     <string name="image_example">Image Example</string>
     <string name="image_loader_title">Image Loader</string>
+    <string name="yes">Yes</string>
+    <string name="cancel">Cancel</string>
+    <string name="i_am_a_fragment">Hello I am a Fragment !</string>
+    <string name="remove_element_message">Are you sure to delete the selected item ?</string>
+    <string name="image_list_title">Log List</string>
+    <string name="load_logs_example">Download Logs</string>
 </resources>

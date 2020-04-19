@@ -126,11 +126,22 @@ public class MainActivity extends AppCompatActivity {
             openImageActivity();
             return true;
         }
+
+        if (id == R.id.action_list) {
+            openLogListActivity();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
     private void openImageActivity(){
         Intent newIntent = new Intent(new Intent(this,ImageLoaderActivity.class));
+        startActivity(newIntent);
+    }
+
+    private void openLogListActivity(){
+        Intent newIntent = new Intent(new Intent(this,LogHistoryActivity.class));
         startActivity(newIntent);
     }
 }

@@ -1,10 +1,14 @@
 package com.mobdev.hellothreads.task.log;
 
+import com.mobdev.hellothreads.model.LogDescriptor;
+
+import java.util.List;
+
 /**
  * Created by Marco Picone picone.m@gmail.com on 19,April,2020
  * Mobile System Development - University Course
  */
-public class LogGenerationTask {
+public class LogDownloadTask {
 
     private String name = null;
 
@@ -16,7 +20,7 @@ public class LogGenerationTask {
     /*
      * An object that contains the ThreadPool singleton.
      */
-    private LogGenerationTaskManager taskManager;
+    private LogDownloadTaskManager taskManager;
 
     /*
      * Fields containing references to the two runnable objects that handle downloading and
@@ -24,12 +28,12 @@ public class LogGenerationTask {
      */
     private Runnable mTaskRunnable;
 
-    private int state;
+    private List<LogDescriptor> logDescriptorList = null;
 
-    public LogGenerationTask(String name) {
+    public LogDownloadTask(String name) {
         this.name = name;
-        this.taskManager = LogGenerationTaskManager.getInstance();
-        this.mTaskRunnable = new LogGenerationTaskRunnable(this);
+        this.taskManager = LogDownloadTaskManager.getInstance();
+        this.mTaskRunnable = new LogDownloadTaskRunnable(this);
     }
 
     public void setThread(Thread thread) {
@@ -51,5 +55,13 @@ public class LogGenerationTask {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<LogDescriptor> getLogDescriptorList() {
+        return logDescriptorList;
+    }
+
+    public void setLogDescriptorList(List<LogDescriptor> logDescriptorList) {
+        this.logDescriptorList = logDescriptorList;
     }
 }
