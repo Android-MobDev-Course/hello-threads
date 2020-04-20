@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if(newTaskCount > 0){
                     Log.d(TAG, "Scheduling new Tasks: " + newTaskCount);
-                    GenericTaskManager.getInstance().retrieveLastLog(newTaskCount);
+                    GenericTaskManager.getInstance().addNewTasks(newTaskCount);
                 }
                 else
                     Toast.makeText(mContext, "New Task Number Error !", Toast.LENGTH_SHORT).show();

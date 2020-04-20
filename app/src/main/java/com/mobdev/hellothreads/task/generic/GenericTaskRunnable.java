@@ -39,7 +39,7 @@ public class GenericTaskRunnable implements Runnable {
         this.random = new Random();
 
         try {
-            retrieveLogDescriptor();
+            doSomething();
         }
         catch (Exception e){
             e.printStackTrace();
@@ -56,7 +56,7 @@ public class GenericTaskRunnable implements Runnable {
 
     }
 
-    private void retrieveLogDescriptor(){
+    private void doSomething(){
         try{
             Thread.sleep(random.nextInt(RANDOM_TASK_DURATION_MS));
 

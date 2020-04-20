@@ -100,7 +100,7 @@ public class GenericTaskManager {
         taskStatus.postValue(this.taskStatusDescriptor);
     }
 
-    public void retrieveLastLog(int count) {
+    public void addNewTasks(int count) {
 
         if(taskStatusDescriptor == null)
             taskStatusDescriptor = new TaskStatusDescriptor();
