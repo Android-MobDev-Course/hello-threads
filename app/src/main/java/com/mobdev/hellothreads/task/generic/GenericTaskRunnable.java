@@ -1,7 +1,5 @@
 package com.mobdev.hellothreads.task.generic;
 
-import com.mobdev.hellothreads.utils.LogFactory;
-
 import java.util.Random;
 
 /**
@@ -27,9 +25,12 @@ public class GenericTaskRunnable implements Runnable {
     @Override
     public void run() {
 
+        // Moves the current Thread into the background
+        android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+
         /*
-         * Stores the current Thread in the the PhotoTask instance, so that the instance
-         * can interrupt the Thread.
+         * Stores the current Thread in the the Task instance, so that the instance
+         * can if necessary interrupt the Thread.
          */
         this.genericTask.setThread(Thread.currentThread());
 
@@ -43,9 +44,7 @@ public class GenericTaskRunnable implements Runnable {
         catch (Exception e){
             e.printStackTrace();
         } finally {
-            // If the decode failed, there's no bitmap.
             if (!isSuccess) {
-                // Sends a failure status to the PhotoTask
                 genericTask.handleState(GenericTaskManager.TASK_FAILED);
             } else {
                 genericTask.handleState(GenericTaskManager.TASK_COMPLETE);

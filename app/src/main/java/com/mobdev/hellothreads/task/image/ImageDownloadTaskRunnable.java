@@ -1,7 +1,6 @@
 package com.mobdev.hellothreads.task.image;
 
 import com.mobdev.hellothreads.R;
-
 import java.util.Random;
 
 /**
@@ -27,9 +26,12 @@ public class ImageDownloadTaskRunnable implements Runnable {
     @Override
     public void run() {
 
+        // Moves the current Thread into the background
+        android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+
         /*
-         * Stores the current Thread in the the PhotoTask instance, so that the instance
-         * can interrupt the Thread.
+         * Stores the current Thread in the the Task instance, so that the instance
+         * can if necessary interrupt the Thread.
          */
         this.imageDownloadTask.setThread(Thread.currentThread());
 

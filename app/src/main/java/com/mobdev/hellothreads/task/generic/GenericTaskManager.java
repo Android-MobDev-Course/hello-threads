@@ -55,13 +55,12 @@ public class GenericTaskManager {
     private GenericTaskManager() {
 
         /*
-         * Creates a work queue for the pool of Thread objects used for downloading, using a linked
-         * list queue that blocks when the queue is empty.
+         * Creates a work queue for the pool of Thread objects
          */
         mDownloadWorkQueue = new LinkedBlockingQueue<Runnable>();
 
         /*
-         * Creates a new pool of Thread objects for the download work queue
+         * Creates a new pool of Thread objects for the task work queue
          */
         mDownloadThreadPool = new ThreadPoolExecutor(CORE_POOL_SIZE,
                 MAXIMUM_POOL_SIZE,
@@ -76,7 +75,7 @@ public class GenericTaskManager {
     public void handleState(GenericTask genericTask, int state) {
 
         switch (state) {
-            // The task finished downloading and decoding the image
+
             case TASK_STARTED:
                 Log.d(TAG, genericTask.getName() + " Started ...");
                 taskStatusDescriptor.incrementStarted();

@@ -5,13 +5,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.widget.ImageView;
-
-import androidx.lifecycle.MutableLiveData;
-
 import com.mobdev.hellothreads.R;
-import com.mobdev.hellothreads.model.TaskStatusDescriptor;
-import com.mobdev.hellothreads.task.generic.GenericTask;
-
 import java.util.Locale;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -62,8 +56,7 @@ public class ImageDownloadTaskManager {
     private ImageDownloadTaskManager() {
 
         /*
-         * Creates a work queue for the pool of Thread objects used for downloading, using a linked
-         * list queue that blocks when the queue is empty.
+         * Creates a work queue for the pool of Thread objects
          */
         mDownloadWorkQueue = new LinkedBlockingQueue<Runnable>();
 
@@ -82,7 +75,6 @@ public class ImageDownloadTaskManager {
     public void handleState(ImageDownloadTask imageDownloadTask, int state) {
 
         switch (state) {
-            // The task finished downloading and decoding the image
             case IMAGE_TASK_STARTED:
                 Log.d(TAG, imageDownloadTask.getName() + " Started ...");
                 sendHandlerMessage(imageDownloadTask, state);

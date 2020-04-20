@@ -23,8 +23,7 @@ public class LogDownloadTask {
     private LogDownloadTaskManager taskManager;
 
     /*
-     * Fields containing references to the two runnable objects that handle downloading and
-     * decoding of the image.
+     * Fields containing references to the runnable object
      */
     private Runnable mTaskRunnable;
 
@@ -40,7 +39,6 @@ public class LogDownloadTask {
         this.mThread = thread;
     }
 
-    // Delegates handling the current state of the task to the PhotoManager object
     void handleState(int state) {
         taskManager.handleState(this, state);
     }

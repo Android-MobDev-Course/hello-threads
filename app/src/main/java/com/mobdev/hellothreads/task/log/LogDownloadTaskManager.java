@@ -85,7 +85,6 @@ public class LogDownloadTaskManager {
     public void handleState(LogDownloadTask logDownloadTask, int state) {
 
         switch (state) {
-            // The task finished downloading and decoding the image
             case TASK_STARTED:
                 Log.d(TAG, logDownloadTask.getName() + " Started ...");
                 break;

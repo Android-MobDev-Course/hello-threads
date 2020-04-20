@@ -19,8 +19,7 @@ public class GenericTask {
     private GenericTaskManager taskManager;
 
     /*
-     * Fields containing references to the two runnable objects that handle downloading and
-     * decoding of the image.
+     * Fields containing references to the runnable objects that handle the task
      */
     private Runnable mTaskRunnable;
 
@@ -34,7 +33,6 @@ public class GenericTask {
         this.mThread = thread;
     }
 
-    // Delegates handling the current state of the task to the PhotoManager object
     void handleState(int state) {
         taskManager.handleState(this, state);
     }
